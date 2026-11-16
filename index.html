@@ -1,76 +1,483 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Démo — EMPIRE CODE HUB</title>
-  <meta name="description" content="Démonstration d&#39;un site vitrine généré automatiquement : services, à propos et contact.">
-  <meta property="og:title" content="Démo — EMPIRE CODE HUB">
-  <meta property="og:description" content="Démonstration d&#39;un site vitrine généré automatiquement : services, à propos et contact.">
-  <link rel="canonical" href="https://donko-dev.github.io/demo-site-vitrine/">
-  <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    body { background:#000; color:#e4e4e7; font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif; }
-    .accent-bg { background: #22d3ee; }
-    .accent-text { color: #22d3ee; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Créez votre site vitrine en quelques minutes</title>
+<meta name="description" content="Créez et téléchargez votre site vitrine professionnel en 4 étapes. Aperçu en direct, modèles au choix, prêt pour GitHub Pages ou Hostinger.">
+<link rel="icon" type="image/png" href="donko.png">
+<script src="https://cdn.fedapay.com/checkout.js?v=1.1.7"></script>
+<style>
+  :root { --bg:#0b0f17; --panel:#111827; --panel2:#0a0d14; --line:rgba(255,255,255,.10); --txt:#e5e7eb; --mut:#9ca3af; --acc:#22d3ee; --ok:#34d399; --err:#f87171; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; }
+  body { background:radial-gradient(1200px 500px at 50% -200px, rgba(34,211,238,.12), transparent), var(--bg); color:var(--txt); font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif; line-height:1.5; min-height:100vh; }
+  header.top { position:sticky; top:0; z-index:10; background:rgba(11,15,23,.85); backdrop-filter:blur(8px); border-bottom:1px solid var(--line); }
+  .bar { max-width:1280px; margin:0 auto; padding:14px 18px; display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; }
+  .brand { font-weight:800; letter-spacing:.02em; color:#fff; font-size:16px; }
+  .brand span { color:var(--acc); }
+  .progress { display:flex; gap:8px; flex-wrap:wrap; }
+  .pstep { font-size:13px; padding:6px 12px; border-radius:999px; border:1px solid var(--line); color:var(--mut); background:transparent; cursor:pointer; }
+  .pstep[aria-current="step"] { border-color:var(--acc); color:#fff; box-shadow:0 0 0 3px rgba(34,211,238,.15); }
+  .pstep.done { color:var(--ok); border-color:rgba(52,211,153,.4); }
+  .pstep:disabled { opacity:.45; cursor:not-allowed; }
+  main { max-width:1280px; margin:0 auto; padding:22px 18px 60px; display:grid; grid-template-columns:minmax(320px,470px) 1fr; gap:22px; align-items:start; }
+  @media (max-width:960px) { main { grid-template-columns:1fr; } }
+  .card { background:var(--panel); border:1px solid var(--line); border-radius:16px; padding:22px; }
+  h1.step-title { font-size:20px; margin:0 0 4px; color:#fff; }
+  .step-sub { color:var(--mut); font-size:14px; margin:0 0 18px; }
+  label { display:block; font-size:13px; color:var(--mut); margin:14px 0 6px; }
+  label .req { color:var(--acc); }
+  input, textarea, select { width:100%; background:#000; color:#fff; border:1px solid var(--line); border-radius:10px; padding:11px 12px; font:inherit; font-size:15px; }
+  textarea { min-height:86px; resize:vertical; }
+  input[type=color] { height:44px; padding:4px; cursor:pointer; }
+  input:focus, textarea:focus, select:focus { outline:none; border-color:var(--acc); box-shadow:0 0 0 3px rgba(34,211,238,.18); }
+  input.invalid, textarea.invalid { border-color:var(--err); }
+  .field-err { color:var(--err); font-size:12px; margin-top:4px; min-height:0; }
+  .hint { font-size:12px; color:#6b7280; margin-top:5px; }
+  .count { float:right; font-size:12px; color:#6b7280; }
+  .svc { border:1px solid var(--line); border-radius:12px; padding:14px; margin-top:12px; background:var(--panel2); }
+  .svc-head { display:flex; justify-content:space-between; align-items:center; font-size:13px; color:var(--mut); font-weight:600; }
+  button { font:inherit; cursor:pointer; border-radius:10px; padding:10px 16px; border:1px solid var(--line); background:var(--panel2); color:var(--txt); transition:.15s; }
+  button:hover:not(:disabled) { border-color:var(--acc); color:#fff; }
+  button:disabled { opacity:.45; cursor:not-allowed; }
+  button.primary { background:var(--acc); color:#001014; border-color:var(--acc); font-weight:700; }
+  button.primary:hover:not(:disabled) { background:#67e8f9; color:#001014; }
+  button.ghost { background:transparent; }
+  button.small { padding:5px 10px; font-size:12px; }
+  .actions { display:flex; justify-content:space-between; gap:10px; margin-top:22px; flex-wrap:wrap; }
+  .templates { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
+  @media (max-width:560px) { .templates { grid-template-columns:1fr; } }
+  .tpl { border:2px solid var(--line); border-radius:14px; padding:10px; cursor:pointer; background:var(--panel2); text-align:left; color:var(--txt); }
+  .tpl[aria-pressed="true"] { border-color:var(--acc); box-shadow:0 0 0 4px rgba(34,211,238,.12); }
+  .tpl .thumb { height:86px; border-radius:9px; margin-bottom:8px; }
+  .tpl .name { font-weight:700; color:#fff; font-size:14px; }
+  .tpl .tag { font-size:11px; color:var(--mut); }
+  .tpl .lock { font-size:11px; color:#fbbf24; }
+  .th-min { background:linear-gradient(#000,#111); border:1px solid #333; }
+  .th-mod { background:linear-gradient(135deg,#0f766e,#1e40af); }
+  .th-ele { background:linear-gradient(#faf7f2,#efe7d6); border:1px solid #d6c9a8; }
+  .premium-box { margin-top:18px; border:1px solid rgba(251,191,36,.35); background:rgba(251,191,36,.06); border-radius:14px; padding:16px; }
+  .premium-box h3 { margin:0 0 6px; font-size:15px; color:#fde68a; }
+  .premium-box ul { margin:8px 0 0; padding-left:18px; color:#e5e7eb; font-size:14px; }
+  .pill { display:inline-block; font-size:12px; padding:3px 10px; border-radius:999px; border:1px solid var(--line); color:var(--mut); }
+  .pill.ok { color:var(--ok); border-color:rgba(52,211,153,.4); }
+  .summary { font-size:14px; color:var(--mut); }
+  .summary b { color:#fff; font-weight:600; }
+  .summary div { padding:8px 0; border-bottom:1px solid var(--line); display:flex; justify-content:space-between; gap:12px; }
+  .alert { border-radius:12px; padding:12px 14px; font-size:14px; margin-bottom:14px; display:none; }
+  .alert.err { background:rgba(248,113,113,.1); border:1px solid rgba(248,113,113,.35); color:#fecaca; }
+  .alert.ok { background:rgba(52,211,153,.1); border:1px solid rgba(52,211,153,.35); color:#a7f3d0; }
+  .alert.info { background:rgba(34,211,238,.08); border:1px solid rgba(34,211,238,.3); color:#cffafe; }
+  .preview-col { position:sticky; top:84px; }
+  @media (max-width:960px) { .preview-col { position:static; } }
+  .preview-head { display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; gap:10px; flex-wrap:wrap; }
+  .preview-head .muted { color:var(--mut); font-size:13px; }
+  #preview { width:100%; height:76vh; min-height:520px; border:1px solid var(--line); border-radius:16px; background:#000; }
+  .hidden { display:none !important; }
+  .foot { text-align:center; color:#6b7280; font-size:12px; padding:20px; }
+</style>
 </head>
 <body>
-  <header class="border-b border-white/10">
-    <nav class="mx-auto flex max-w-6xl items-center justify-between px-4 py-4">
-      <span class="font-bold tracking-wide text-white">Démo — EMPIRE CODE HUB</span>
-      <div class="flex items-center gap-5 text-sm">
-        <a class="text-zinc-300 hover:text-white" href="#services">Nos services</a>
-        <a class="text-zinc-300 hover:text-white" href="#contact">Contact</a>
-      </div>
+
+<header class="top">
+  <div class="bar">
+    <div class="brand">Site<span>Vitrine</span> · Créateur</div>
+    <nav class="progress" aria-label="Étapes">
+      <button class="pstep" data-go="1" aria-current="step">1 · Entreprise</button>
+      <button class="pstep" data-go="2" disabled>2 · Contenu</button>
+      <button class="pstep" data-go="3" disabled>3 · Design</button>
+      <button class="pstep" data-go="4" disabled>4 · Contact</button>
     </nav>
-  </header>
+  </div>
+</header>
 
-  <main>
-    <section class="mx-auto max-w-4xl px-4 py-20 text-center">
-      <h1 class="text-4xl font-extrabold leading-tight text-white sm:text-5xl">Votre site vitrine professionnel en quelques jours</h1>
-      <p class="mx-auto mt-5 max-w-2xl text-lg text-zinc-400">Une présentation claire de votre activité, rapide sur téléphone et optimisée pour Google.</p>
-      <a href="#contact" class="accent-bg mt-8 inline-block rounded-lg px-6 py-3 font-semibold text-black">Demander un devis</a>
-    </section>
+<main>
+  <section class="card" aria-live="polite">
+    <div id="alert" class="alert"></div>
 
-    <section id="services" class="mx-auto max-w-6xl px-4 py-16">
-      <h2 class="text-2xl font-bold text-white sm:text-3xl">Nos services</h2>
-      <div class="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-        <article class="rounded-2xl border border-white/10 bg-white/[0.03] p-6">
-          <h3 class="text-lg font-semibold text-white">Site vitrine</h3>
-          <p class="mt-2 text-sm leading-relaxed text-zinc-400">Une page d&#39;accueil claire, des sections bien organisées et un formulaire de contact.</p>
-        </article>
-        <article class="rounded-2xl border border-white/10 bg-white/[0.03] p-6">
-          <h3 class="text-lg font-semibold text-white">Optimisation SEO</h3>
-          <p class="mt-2 text-sm leading-relaxed text-zinc-400">Balises, description et adresse propres pour être trouvé sur Google.</p>
-        </article>
-        <article class="rounded-2xl border border-white/10 bg-white/[0.03] p-6">
-          <h3 class="text-lg font-semibold text-white">Responsive</h3>
-          <p class="mt-2 text-sm leading-relaxed text-zinc-400">Un affichage parfait sur smartphone, tablette et ordinateur.</p>
-        </article>
-        <article class="rounded-2xl border border-white/10 bg-white/[0.03] p-6">
-          <h3 class="text-lg font-semibold text-white">Support</h3>
-          <p class="mt-2 text-sm leading-relaxed text-zinc-400">Accompagnement après la mise en ligne, par WhatsApp et par email.</p>
-        </article>
+    <!-- ÉTAPE 1 -->
+    <div class="step" data-step="1">
+      <h1 class="step-title">Votre entreprise</h1>
+      <p class="step-sub">Ces informations apparaissent en haut de votre site.</p>
+      <label for="brand">Nom de l’entreprise <span class="req">*</span><span class="count" id="c-brand"></span></label>
+      <input id="brand" maxlength="80" placeholder="Ex. Boutique Awa Services" autocomplete="organization">
+      <div class="field-err" data-err="brand"></div>
+      <label for="lang">Langue du site</label>
+      <select id="lang"><option value="fr">Français</option><option value="en">English</option><option value="es">Español</option><option value="pt">Português</option></select>
+    </div>
+
+    <!-- ÉTAPE 2 -->
+    <div class="step hidden" data-step="2">
+      <h1 class="step-title">Votre contenu</h1>
+      <p class="step-sub">Le titre d’accueil et vos services. Vous pouvez en ajouter jusqu’à 12.</p>
+      <label for="heroTitle">Titre principal <span class="req">*</span><span class="count" id="c-hero"></span></label>
+      <input id="heroTitle" maxlength="120" placeholder="Ex. Des produits de qualité livrés chez vous">
+      <div class="field-err" data-err="heroTitle"></div>
+      <label for="heroSub">Phrase d’accroche</label>
+      <textarea id="heroSub" maxlength="250" placeholder="Ex. Commandez facilement, livraison rapide à Cotonou."></textarea>
+      <label for="heroCta">Texte du bouton</label>
+      <input id="heroCta" maxlength="40" value="Nous contacter">
+      <label for="servicesTitle">Titre de la section services</label>
+      <input id="servicesTitle" maxlength="60" value="Nos services">
+      <label style="margin-top:18px">Vos services <span class="req">*</span> <span class="pill" id="svcCount"></span></label>
+      <div id="svcList"></div>
+      <div style="margin-top:12px"><button type="button" id="addSvc" class="small">+ Ajouter un service</button></div>
+      <div class="field-err" data-err="services"></div>
+      <label for="about">À propos (facultatif)</label>
+      <textarea id="about" maxlength="800" placeholder="Présentez votre activité en quelques phrases."></textarea>
+    </div>
+
+    <!-- ÉTAPE 3 -->
+    <div class="step hidden" data-step="3">
+      <h1 class="step-title">Choisissez le design</h1>
+      <p class="step-sub">Trois modèles professionnels. Le modèle Minimal est gratuit.</p>
+      <div class="templates" role="group" aria-label="Modèles">
+        <button type="button" class="tpl" data-tpl="minimal" aria-pressed="true"><div class="thumb th-min"></div><div class="name">Minimal</div><div class="tag">Sombre, épuré</div><div class="lock" data-lock="minimal"></div></button>
+        <button type="button" class="tpl" data-tpl="moderne" aria-pressed="false"><div class="thumb th-mod"></div><div class="name">Moderne</div><div class="tag">Dégradé, cartes vives</div><div class="lock" data-lock="moderne"></div></button>
+        <button type="button" class="tpl" data-tpl="elegant" aria-pressed="false"><div class="thumb th-ele"></div><div class="name">Élégant</div><div class="tag">Clair, typographie raffinée</div><div class="lock" data-lock="elegant"></div></button>
       </div>
-    </section>
+      <label for="color">Couleur principale</label>
+      <input id="color" type="color" value="#22d3ee">
 
-    <section class="mx-auto max-w-3xl px-4 py-16">
-      <h2 class="text-2xl font-bold text-white">À propos</h2>
-      <p class="mt-4 leading-relaxed text-zinc-400">Cette page est une démonstration générée avec le générateur de site vitrine d&#39;EMPIRE CODE HUB. Remplacez les textes par ceux de votre activité.</p>
-    </section>
-    <section id="contact" class="mx-auto max-w-3xl px-4 py-16 text-center">
-      <h2 class="text-2xl font-bold text-white sm:text-3xl">Contact</h2>
-      <p class="mt-3 text-zinc-400">Écrivez-nous, nous répondons rapidement.</p>
-      <div class="mt-8 flex flex-wrap items-center justify-center gap-4">
-        <a href="https://wa.me/2290196809106?text=Bonjour%2C%20j'ai%20vu%20la%20d%C3%A9mo%20et%20je%20souhaite%20un%20devis." target="_blank" rel="noopener" class="rounded-lg bg-[#25D366] px-5 py-3 font-semibold text-black">WhatsApp</a>
-        <a class="text-zinc-300 hover:text-white" href="mailto:empiredonko@gmail.com">empiredonko@gmail.com</a>
+      <div class="premium-box" id="premiumBox">
+        <h3>Passez au Premium</h3>
+        <div class="summary"><span id="premiumStatus"></span></div>
+        <ul>
+          <li>Les 3 modèles de design</li>
+          <li>Site sans mention « Créé avec… »</li>
+          <li>Plan du site (sitemap) et fichier robots.txt pour Google</li>
+        </ul>
+        <div style="margin-top:12px"><button type="button" class="primary" id="payBtn">Débloquer pour <span id="priceTxt"></span></button></div>
+        <div class="hint">Paiement sécurisé par FedaPay (Mobile Money et cartes).</div>
       </div>
-    </section>
-  </main>
+    </div>
 
-  <footer class="border-t border-white/10 py-6 text-center text-xs text-zinc-500">
-    © 2026 Démo — EMPIRE CODE HUB. Tous droits réservés.
-  </footer>
+    <!-- ÉTAPE 4 -->
+    <div class="step hidden" data-step="4">
+      <h1 class="step-title">Contact et publication</h1>
+      <p class="step-sub">Vos clients vous contacteront par ces moyens.</p>
+      <label for="wa">Numéro WhatsApp <span class="req">*</span></label>
+      <input id="wa" inputmode="numeric" placeholder="Ex. 2290196809106">
+      <div class="hint">Chiffres seulement, avec l’indicatif pays.</div>
+      <div class="field-err" data-err="wa"></div>
+      <label for="email">Email (facultatif)</label>
+      <input id="email" type="email" placeholder="contact@votre-domaine.com">
+      <div class="field-err" data-err="email"></div>
+      <label for="waMsg">Message pré-rempli sur WhatsApp</label>
+      <input id="waMsg" maxlength="160" value="Bonjour, je souhaite un devis.">
+      <label for="siteUrl">Adresse future du site (facultatif)</label>
+      <input id="siteUrl" placeholder="https://votre-nom.github.io/mon-site/">
+      <div class="field-err" data-err="siteUrl"></div>
+      <label for="seoDesc">Description pour Google (facultatif)</label>
+      <textarea id="seoDesc" maxlength="160" placeholder="Une phrase qui résume votre activité."></textarea>
+
+      <h3 style="margin:22px 0 8px;font-size:15px;color:#fff">Récapitulatif</h3>
+      <div class="summary" id="summary"></div>
+    </div>
+
+    <div class="actions">
+      <button type="button" class="ghost" id="prev">← Précédent</button>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <button type="button" id="next" class="primary">Suivant →</button>
+        <button type="button" id="download" class="primary hidden">Télécharger mon site (ZIP)</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="preview-col" aria-label="Aperçu">
+    <div class="preview-head">
+      <span class="muted">Aperçu en direct</span>
+      <span class="pill" id="tplBadge">Minimal · Gratuit</span>
+    </div>
+    <iframe id="preview" title="Aperçu du site" sandbox=""></iframe>
+  </section>
+</main>
+<div class="foot">Vos données restent dans votre navigateur. Le paiement est traité par FedaPay.</div>
+
+<script>
+/* =========================================================
+ * CONFIGURATION — à remplacer par vos valeurs
+ * ========================================================= */
+const CONFIG = {
+  FEDAPAY_PUBLIC_KEY: 'pk_sandbox_REMPLACEZ_PAR_VOTRE_CLE_PUBLIQUE',
+  FEDAPAY_ENV: 'sandbox',              // 'sandbox' pour tester, 'live' pour encaisser
+  PRICE_XOF: 5000,                     // prix du Premium en FCFA
+  VERIFY_URL: 'verifier.php',          // confirmation côté serveur (Hostinger)
+  STORE_URL: 'https://empirecode.mychariow.co/',  // lien affiché sur les sites gratuits
+  STORE_NAME: 'EMPIRE CODE HUB'
+};
+
+(() => {
+  'use strict';
+  const $ = (s) => document.querySelector(s);
+  const $$ = (s) => [...document.querySelectorAll(s)];
+  const MAX_SVC = 12;
+  const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const TEMPLATES = { minimal: 'Minimal', moderne: 'Moderne', elegant: 'Élégant' };
+  const PREMIUM_KEY = 'svsite:premium';
+  let step = 1, tpl = 'minimal', premium = false, lastError = '';
+
+  /* ---------- Accès Premium (mémorisé après paiement confirmé) ---------- */
+  function loadPremium() {
+    try {
+      const p = JSON.parse(localStorage.getItem(PREMIUM_KEY) || 'null');
+      if (p && p.token && p.expires > Date.now()) { premium = true; return; }
+    } catch (_) { /* ignoré */ }
+    premium = false;
+  }
+  function savePremium(token, expires) {
+    try { localStorage.setItem(PREMIUM_KEY, JSON.stringify({ token, expires })); } catch (_) { /* ignoré */ }
+    premium = true;
+  }
+
+  /* ---------- Services ---------- */
+  function svcRow(title, desc) {
+    const el = document.createElement('div');
+    el.className = 'svc';
+    el.innerHTML = '<div class="svc-head"><span class="n"></span><button type="button" class="small ghost del">Supprimer</button></div>'
+      + '<label>Titre</label><input class="st" maxlength="80"><div class="field-err e-t"></div>'
+      + '<label>Description</label><textarea class="sd" maxlength="240"></textarea><div class="field-err e-d"></div>';
+    el.querySelector('.st').value = title || '';
+    el.querySelector('.sd').value = desc || '';
+    el.querySelector('.del').addEventListener('click', () => { el.remove(); renumber(); live(); });
+    return el;
+  }
+  function renumber() {
+    $$('#svcList .svc').forEach((el, i) => { el.querySelector('.n').textContent = 'Service ' + (i + 1); });
+    const n = $$('#svcList .svc').length;
+    $('#svcCount').textContent = n + ' / ' + MAX_SVC;
+    $('#addSvc').disabled = n >= MAX_SVC;
+  }
+
+  /* ---------- Lecture et validation ---------- */
+  function read() {
+    return {
+      brand: $('#brand').value.trim(), lang: $('#lang').value, primaryColor: $('#color').value,
+      servicesTitle: $('#servicesTitle').value.trim() || 'Nos services',
+      hero: { title: $('#heroTitle').value.trim(), subtitle: $('#heroSub').value.trim(), cta: $('#heroCta').value.trim() || 'Nous contacter' },
+      services: $$('#svcList .svc').map((el) => ({ title: el.querySelector('.st').value.trim(), description: el.querySelector('.sd').value.trim() })),
+      about: $('#about').value.trim(),
+      contact: { whatsapp: $('#wa').value.replace(/\D/g, ''), email: $('#email').value.trim(), message: $('#waMsg').value.trim() },
+      seo: { description: $('#seoDesc').value.trim(), url: $('#siteUrl').value.trim().replace(/\/$/, '') }
+    };
+  }
+  function setErr(key, msg) {
+    const el = document.querySelector('[data-err="' + key + '"]');
+    if (el) el.textContent = msg || '';
+    const input = { brand: '#brand', heroTitle: '#heroTitle', wa: '#wa', email: '#email', siteUrl: '#siteUrl' }[key];
+    if (input) $(input).classList.toggle('invalid', !!msg);
+  }
+  function validateStep(n) {
+    const d = read(); let ok = true;
+    if (n === 1) {
+      setErr('brand', d.brand ? '' : 'Indiquez le nom de votre entreprise.'); if (!d.brand) ok = false;
+    }
+    if (n === 2) {
+      setErr('heroTitle', d.hero.title ? '' : 'Indiquez le titre principal.'); if (!d.hero.title) ok = false;
+      const svcErr = [];
+      if (!d.services.length) svcErr.push('Ajoutez au moins un service.');
+      $$('#svcList .svc').forEach((el, i) => {
+        const t = el.querySelector('.st').value.trim(), s = el.querySelector('.sd').value.trim();
+        el.querySelector('.e-t').textContent = t ? '' : 'Titre obligatoire.';
+        el.querySelector('.e-d').textContent = s ? '' : 'Description obligatoire.';
+        if (!t || !s) svcErr.push('Service ' + (i + 1) + ' incomplet.');
+      });
+      document.querySelector('[data-err="services"]').textContent = svcErr[0] || '';
+      if (svcErr.length) ok = false;
+    }
+    if (n === 4) {
+      const waOk = /^\d{6,15}$/.test(d.contact.whatsapp);
+      setErr('wa', waOk ? '' : 'Chiffres seulement, avec l’indicatif pays (ex. 2290196809106).'); if (!waOk) ok = false;
+      const emOk = !d.contact.email || /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(d.contact.email);
+      setErr('email', emOk ? '' : 'Adresse email invalide.'); if (!emOk) ok = false;
+      const urlOk = !d.seo.url || /^https:\/\/[^\s]+$/.test(d.seo.url);
+      setErr('siteUrl', urlOk ? '' : 'Doit commencer par https://'); if (!urlOk) ok = false;
+    }
+    return ok;
+  }
+  function alertBox(kind, msg) {
+    const a = $('#alert');
+    if (!msg) { a.style.display = 'none'; return; }
+    a.className = 'alert ' + kind; a.textContent = msg; a.style.display = 'block';
+  }
+
+  /* ---------- Navigation entre étapes ---------- */
+  function go(n) {
+    step = n;
+    $$('.step').forEach((el) => el.classList.toggle('hidden', +el.dataset.step !== n));
+    $$('.pstep').forEach((b) => {
+      const k = +b.dataset.go;
+      b.setAttribute('aria-current', k === n ? 'step' : 'false');
+      b.classList.toggle('done', k < n);
+      b.disabled = k > maxReached();
+    });
+    $('#prev').disabled = n === 1;
+    $('#next').classList.toggle('hidden', n === 4);
+    $('#download').classList.toggle('hidden', n !== 4);
+    if (n === 4) renderSummary();
+    alertBox('', '');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+  let reached = 1;
+  const maxReached = () => reached;
+  $('#next').addEventListener('click', () => {
+    if (!validateStep(step)) { alertBox('err', 'Vérifiez les champs signalés en rouge pour continuer.'); return; }
+    reached = Math.max(reached, step + 1); go(step + 1);
+  });
+  $('#prev').addEventListener('click', () => go(step - 1));
+  $$('.pstep').forEach((b) => b.addEventListener('click', () => go(+b.dataset.go)));
+
+  /* ---------- Modèles et Premium ---------- */
+  function refreshTemplates() {
+    $$('.tpl').forEach((b) => {
+      const k = b.dataset.tpl, locked = k !== 'minimal' && !premium;
+      b.setAttribute('aria-pressed', String(k === tpl));
+      b.querySelector('[data-lock]').textContent = locked ? '🔒 Premium' : (k === 'minimal' ? 'Gratuit' : 'Inclus Premium');
+    });
+    $('#premiumStatus').innerHTML = premium ? '<span class="pill ok">Premium activé</span>' : 'Une seule fois, pour ce site.';
+    $('#payBtn').classList.toggle('hidden', premium);
+    $('#premiumBox').classList.toggle('hidden', premium && false);
+    $('#priceTxt').textContent = CONFIG.PRICE_XOF.toLocaleString('fr-FR') + ' FCFA';
+    $('#tplBadge').textContent = TEMPLATES[tpl] + ' · ' + (premium ? 'Premium' : (tpl === 'minimal' ? 'Gratuit' : 'Premium'));
+  }
+  $$('.tpl').forEach((b) => b.addEventListener('click', () => {
+    const k = b.dataset.tpl;
+    if (k !== 'minimal' && !premium) { alertBox('info', 'Ce modèle est inclus dans le Premium. Cliquez sur « Débloquer » ci-dessous.'); $('#payBtn').focus(); return; }
+    tpl = k; refreshTemplates(); live();
+  }));
+
+  /* ---------- Paiement FedaPay ---------- */
+  function fedapayReady() { return typeof window.FedaPay !== 'undefined' && window.FedaPay && typeof window.FedaPay.init === 'function'; }
+  async function verifyOnServer(transactionId) {
+    const body = new URLSearchParams({ transaction_id: String(transactionId) });
+    const r = await fetch(CONFIG.VERIFY_URL, { method: 'POST', body, headers: { 'Content-Type': 'application/x-www-form-urlencoded' } });
+    const data = await r.json().catch(() => ({ ok: false, error: 'réponse invalide' }));
+    if (!r.ok || !data.ok) throw new Error(data.error || 'vérification impossible');
+    return data;
+  }
+  $('#payBtn').addEventListener('click', () => {
+    if (!fedapayReady()) { alertBox('err', 'Le module de paiement ne se charge pas. Vérifiez votre connexion et rechargez la page.'); return; }
+    const d = read();
+    const widget = window.FedaPay.init({
+      public_key: CONFIG.FEDAPAY_PUBLIC_KEY,
+      transaction: { amount: CONFIG.PRICE_XOF, description: 'Premium — site vitrine ' + (d.brand || '') },
+      customer: { email: d.contact.email || undefined },
+      onComplete: async (resp) => {
+        const tx = resp && resp.transaction;
+        if (!tx || tx.status !== 'approved') { alertBox('err', 'Paiement non abouti. Vous pouvez réessayer.'); return; }
+        alertBox('info', 'Paiement reçu, vérification en cours…');
+        try {
+          const v = await verifyOnServer(tx.id);
+          savePremium(v.token, v.expires);
+          refreshTemplates(); live();
+          alertBox('ok', 'Premium activé. Vous pouvez choisir tous les modèles et télécharger sans mention.');
+        } catch (e) {
+          alertBox('err', 'Paiement reçu mais non confirmé : ' + e.message + '. Contactez-nous avec votre référence de transaction : ' + tx.id);
+        }
+      }
+    });
+    widget.open();
+  });
+
+  /* ---------- Rendu du site (3 modèles) ---------- */
+  function css(accent, t) {
+    const base = '*{box-sizing:border-box}html,body{margin:0}body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;line-height:1.55}a{color:' + accent + '}.wrap{max-width:1100px;margin:0 auto;padding:64px 20px}.narrow{max-width:760px}.btn{display:inline-block;background:' + accent + ';color:#000;padding:12px 24px;border-radius:10px;font-weight:700;text-decoration:none}.grid{display:grid;gap:18px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}footer{text-align:center;font-size:12px;padding:22px}nav{max-width:1100px;margin:0 auto;padding:16px 20px;display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}nav a{text-decoration:none;margin-left:18px;font-size:14px}h1{font-size:clamp(28px,5vw,46px);line-height:1.15;margin:0;text-align:center}.sub{max-width:640px;margin:18px auto 0;text-align:center;font-size:18px}.hero{text-align:center}h2{font-size:26px;margin:0 0 24px}.card h3{margin:0 0 8px;font-size:18px}.card p{margin:0;font-size:14px}.wa{display:inline-block;background:#25D366;color:#000;padding:12px 22px;border-radius:10px;font-weight:700;text-decoration:none;margin-right:12px}.contact{text-align:center}@media (prefers-reduced-motion:reduce){*{scroll-behavior:auto}}';
+    if (t === 'minimal') return base + 'body{background:#000;color:#e4e4e7}nav{border-bottom:1px solid rgba(255,255,255,.1)}nav b{color:#fff}nav a{color:#d4d4d8}h1,h2,.card h3{color:#fff}.card{border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:22px;background:rgba(255,255,255,.03)}.card p{color:#a1a1aa}.sub,.narrow p{color:#a1a1aa}footer{border-top:1px solid rgba(255,255,255,.1);color:#71717a}';
+    if (t === 'moderne') return base + 'body{background:#0b1020;color:#e2e8f0}nav{background:rgba(255,255,255,.04);position:sticky;top:0;backdrop-filter:blur(6px)}nav b{color:#fff}nav a{color:#cbd5e1}h1{background:linear-gradient(90deg,#fff,' + accent + ');-webkit-background-clip:text;background-clip:text;color:transparent}h2,.card h3{color:#fff}.card{border-left:4px solid ' + accent + ';border-radius:14px;padding:22px;background:linear-gradient(135deg,rgba(255,255,255,.06),rgba(255,255,255,.02));box-shadow:0 10px 30px rgba(0,0,0,.25)}.card p,.sub,.narrow p{color:#94a3b8}footer{border-top:1px solid rgba(255,255,255,.08);color:#64748b}';
+    return base + 'body{background:#faf7f2;color:#2b2b2b;font-family:Georgia,"Times New Roman",serif}nav{border-bottom:1px solid #d6c9a8}nav b{color:#2b2b2b;font-size:18px;letter-spacing:.04em}nav a{color:#5a4a2a}h1,h2,.card h3{color:#2b2b2b;font-weight:600}.card{border:1px solid #d6c9a8;border-radius:4px;padding:24px;background:#fff}.card p,.sub,.narrow p{color:#5a5a5a}.btn{color:#fff}footer{border-top:1px solid #d6c9a8;color:#7a6a4a}';
+  }
+  function renderSite(c, t, withCredit) {
+    const accent = /^#[0-9a-fA-F]{6}$/.test(c.primaryColor) ? c.primaryColor : '#22d3ee';
+    const desc = (c.seo && c.seo.description) || c.hero.subtitle || '';
+    const wa = 'https://wa.me/' + c.contact.whatsapp + '?text=' + encodeURIComponent(c.contact.message || 'Bonjour, je souhaite un devis.');
+    const cards = c.services.map((s) => '<article class="card"><h3>' + esc(s.title) + '</h3><p>' + esc(s.description) + '</p></article>').join('');
+    const about = c.about ? '<section class="wrap narrow"><h2>À propos</h2><p>' + esc(c.about) + '</p></section>' : '';
+    const email = c.contact.email ? '<a href="mailto:' + esc(c.contact.email) + '">' + esc(c.contact.email) + '</a>' : '';
+    const canon = c.seo && c.seo.url ? '<link rel="canonical" href="' + esc(c.seo.url) + '">' : '';
+    const credit = withCredit ? ' · Site créé avec <a href="' + esc(CONFIG.STORE_URL) + '" target="_blank" rel="noopener">' + esc(CONFIG.STORE_NAME) + '</a>' : '';
+    return '<!DOCTYPE html>\n<html lang="' + esc(c.lang) + '">\n<head>\n<meta charset="UTF-8">\n<meta name="viewport" content="width=device-width, initial-scale=1">\n<title>' + esc(c.brand) + '</title>\n<meta name="description" content="' + esc(desc) + '">\n<meta property="og:title" content="' + esc(c.brand) + '">\n<meta property="og:description" content="' + esc(desc) + '">\n' + canon + '\n<style>' + css(accent, t) + '</style>\n</head>\n<body>\n'
+      + '<nav><b>' + esc(c.brand) + '</b><div><a href="#services">' + esc(c.servicesTitle) + '</a><a href="#contact">Contact</a></div></nav>\n<main>\n'
+      + '<section class="wrap hero"><h1>' + esc(c.hero.title) + '</h1>' + (c.hero.subtitle ? '<p class="sub">' + esc(c.hero.subtitle) + '</p>' : '') + '<a class="btn" style="margin-top:28px" href="#contact">' + esc(c.hero.cta) + '</a></section>\n'
+      + '<section id="services" class="wrap"><h2>' + esc(c.servicesTitle) + '</h2><div class="grid">' + cards + '</div></section>\n' + about + '\n'
+      + '<section id="contact" class="wrap contact"><h2>Contact</h2><p class="sub" style="margin-top:0">Écrivez-nous, nous répondons rapidement.</p><a class="wa" href="' + wa + '" target="_blank" rel="noopener">WhatsApp</a>' + email + '</section>\n</main>\n'
+      + '<footer>© ' + new Date().getFullYear() + ' ' + esc(c.brand) + '. Tous droits réservés.' + credit + '</footer>\n</body>\n</html>\n';
+  }
+  function renderSummary() {
+    const d = read();
+    $('#summary').innerHTML = '<div><span>Entreprise</span><b>' + esc(d.brand) + '</b></div>'
+      + '<div><span>Services</span><b>' + d.services.length + '</b></div>'
+      + '<div><span>Modèle</span><b>' + TEMPLATES[tpl] + '</b></div>'
+      + '<div><span>WhatsApp</span><b>' + esc(d.contact.whatsapp) + '</b></div>';
+  }
+  function currentTemplateAllowed() { return tpl === 'minimal' || premium; }
+  function live() {
+    renumber();
+    const d = read();
+    const show = Object.assign({}, d, {
+      brand: d.brand || 'Votre entreprise',
+      hero: { title: d.hero.title || 'Le titre de votre accueil', subtitle: d.hero.subtitle, cta: d.hero.cta },
+      services: d.services.length ? d.services : [{ title: 'Votre service', description: 'Décrivez votre service ici.' }],
+      contact: Object.assign({}, d.contact, { whatsapp: d.contact.whatsapp || '0000000000' })
+    });
+    $('#preview').srcdoc = renderSite(show, currentTemplateAllowed() ? tpl : 'minimal', !premium);
+    refreshTemplates();
+  }
+  ['input', 'change'].forEach((ev) => document.addEventListener(ev, (e) => { if (e.target.matches('input,textarea,select')) live(); }));
+
+  /* ---------- Téléchargement ZIP (sans dépendance) ---------- */
+  const CRC_T = (() => { const t = new Uint32Array(256); for (let n = 0; n < 256; n++) { let c = n; for (let k = 0; k < 8; k++) c = c & 1 ? 0xEDB88320 ^ (c >>> 1) : c >>> 1; t[n] = c >>> 0; } return t; })();
+  const crc32 = (b) => { let c = 0xFFFFFFFF; for (let i = 0; i < b.length; i++) c = CRC_T[(c ^ b[i]) & 0xFF] ^ (c >>> 8); return (c ^ 0xFFFFFFFF) >>> 0; };
+  const u16 = (n) => [n & 255, (n >>> 8) & 255];
+  const u32 = (n) => [n & 255, (n >>> 8) & 255, (n >>> 16) & 255, (n >>> 24) & 255];
+  function makeZip(files) {
+    const enc = new TextEncoder(), parts = [], central = []; let off = 0;
+    for (const [name, text] of Object.entries(files)) {
+      const nb = enc.encode(name), data = enc.encode(text), crc = crc32(data), size = data.length;
+      const local = new Uint8Array([...u32(0x04034b50), ...u16(20), ...u16(0x0800), ...u16(0), ...u16(0), ...u16(0x21), ...u32(crc), ...u32(size), ...u32(size), ...u16(nb.length), ...u16(0)]);
+      parts.push(local, nb, data); central.push({ nb, crc, size, off }); off += local.length + nb.length + size;
+    }
+    const cdStart = off; let cdSize = 0;
+    for (const c of central) {
+      const hdr = new Uint8Array([...u32(0x02014b50), ...u16(20), ...u16(20), ...u16(0x0800), ...u16(0), ...u16(0), ...u16(0x21), ...u32(c.crc), ...u32(c.size), ...u32(c.size), ...u16(c.nb.length), ...u16(0), ...u16(0), ...u16(0), ...u16(0), ...u32(0), ...u32(c.off)]);
+      parts.push(hdr, c.nb); cdSize += hdr.length + c.nb.length;
+    }
+    parts.push(new Uint8Array([...u32(0x06054b50), ...u16(0), ...u16(0), ...u16(central.length), ...u16(central.length), ...u32(cdSize), ...u32(cdStart), ...u16(0)]));
+    return new Blob(parts, { type: 'application/zip' });
+  }
+  const slug = (s) => (s || 'mon-site').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'mon-site';
+  function files(d) {
+    const withCredit = !premium;
+    const f = { 'index.html': renderSite(d, currentTemplateAllowed() ? tpl : 'minimal', withCredit) };
+    if (premium && d.seo.url) {
+      f['sitemap.xml'] = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n  <url><loc>' + esc(d.seo.url + '/') + '</loc></url>\n</urlset>\n';
+      f['robots.txt'] = 'User-agent: *\nAllow: /\nSitemap: ' + d.seo.url + '/sitemap.xml\n';
+    }
+    f['LISEZMOI.txt'] = 'VOTRE SITE VITRINE\n\nMISE EN LIGNE SUR GITHUB PAGES (gratuit)\n1. Créez un dépôt public sur github.com.\n2. Envoyez tous les fichiers de ce dossier à la RACINE du dépôt.\n3. Settings → Pages → Branch : main, dossier : / (root) → Save.\n4. Votre site sera à https://VOTRE-NOM.github.io/NOM-DU-DEPOT/\n\nMISE EN LIGNE SUR HOSTINGER\n1. hPanel → Gestionnaire de fichiers → public_html.\n2. Téléversez tous les fichiers de ce dossier.\n';
+    return f;
+  }
+  $('#download').addEventListener('click', () => {
+    let bad = null;
+    for (const s of [1, 2, 4]) if (!validateStep(s)) { bad = s; break; }
+    if (bad) { go(bad); alertBox('err', 'Complétez cette étape avant de télécharger.'); return; }
+    const d = read();
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(makeZip(files(d)));
+    a.download = slug(d.brand) + '-site.zip';
+    document.body.append(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+    alertBox('ok', 'Votre site est téléchargé. Ouvrez LISEZMOI.txt pour le mettre en ligne.');
+  });
+
+  /* ---------- Démarrage ---------- */
+  loadPremium();
+  ['Site vitrine', 'Référencement Google', 'Support après livraison'].forEach((t, i) => {
+    $('#svcList').append(svcRow(t, ['Une présentation claire de votre activité.', 'Vos pages bien référencées sur Google.', 'Un accompagnement par WhatsApp et email.'][i]));
+  });
+  reached = 1; renumber(); go(1); live();
+  if (!fedapayReady()) { /* module de paiement : vérifié au clic */ }
+  window.__cfg = { read, validateStep, renderSite, files, makeZip, go, get premium() { return premium; }, get tpl() { return tpl; }, setTpl(k) { tpl = k; live(); } };
+})();
+</script>
 </body>
 </html>
