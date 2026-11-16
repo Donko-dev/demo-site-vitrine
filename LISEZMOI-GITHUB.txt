@@ -1,0 +1,8 @@
+MISE EN LIGNE SUR GITHUB PAGES (démo)
+
+1. Créez un dépôt public nommé : demo-site-vitrine
+2. Téléversez les 3 fichiers à la RACINE du dépôt : index.html, sitemap.xml, robots.txt
+3. Dépôt → Settings → Pages → Source : "Deploy from a branch" → Branch : main, dossier : / (root) → Save
+4. Attendez 1 à 3 minutes, puis ouvrez : https://donko-dev.github.io/demo-site-vitrine/
+
+Si votre dépôt porte un autre nom, modifiez l'adresse dans les fichiers sitemap.xml et robots.txt (et dans index.html, balise canonical), ou régénérez avec seo.url.

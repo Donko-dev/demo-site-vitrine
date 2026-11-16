@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://donko-dev.github.io/demo-site-vitrine/sitemap.xml
