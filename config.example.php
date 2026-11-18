@@ -8,8 +8,8 @@ return [
     'fedapay_secret_key' => 'sk_sandbox_REMPLACEZ_PAR_VOTRE_CLE_SECRETE',
     // 'sandbox' pour les tests, 'live' pour les vrais paiements
     'fedapay_env' => 'sandbox',
-    // Prix minimum accepté, en FCFA (doit correspondre à CONFIG.PRICE_XOF dans index.html)
-    'price_xof' => 5000,
+    // Prix par niveau, en FCFA (doivent correspondre à PRICES dans index.html)
+    'prices' => ['debutant' => 7000, 'intermediaire' => 12000, 'pro' => 15000],
     // Adresse exacte du configurateur, avec https (ex. https://votre-domaine.com)
     'allowed_origin' => 'https://votre-domaine.com',
     // Chaîne aléatoire longue (au moins 32 caractères). Générez-la avec : openssl rand -hex 32

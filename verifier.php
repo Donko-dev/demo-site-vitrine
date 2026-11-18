@@ -39,7 +39,10 @@ $tx = $data['v1/transaction'] ?? $data['transaction'] ?? $data;
 
 /* 2. Contrôles : statut approuvé et montant suffisant */
 if (($tx['status'] ?? '') !== 'approved') out(402, ['ok' => false, 'error' => 'paiement non approuvé']);
-if ((int) ($tx['amount'] ?? 0) < (int) $cfg['price_xof']) out(402, ['ok' => false, 'error' => 'montant insuffisant']);
+$tier = (string) (filter_input(INPUT_POST, 'tier', FILTER_UNSAFE_RAW) ?? '');
+$prices = $cfg['prices'] ?? [];
+if (!isset($prices[$tier])) out(400, ['ok' => false, 'error' => 'niveau de site inconnu']);
+if ((int) ($tx['amount'] ?? 0) < (int) $prices[$tier]) out(402, ['ok' => false, 'error' => 'montant insuffisant pour ce niveau']);
 
 /* 3. Un même paiement ne débloque qu'une seule fois */
 $usedFile = __DIR__ . '/../data-private/used-transactions.json';
@@ -51,6 +54,6 @@ file_put_contents($usedFile, json_encode($used), LOCK_EX);
 
 /* 4. Jeton signé, valable 30 jours */
 $expires = time() + 30 * 86400;
-$payload = $id . '.' . $expires;
+$payload = $id . '.' . $tier . '.' . $expires;
 $token = $payload . '.' . hash_hmac('sha256', $payload, $cfg['token_secret']);
-out(200, ['ok' => true, 'token' => $token, 'expires' => $expires * 1000]);
+out(200, ['ok' => true, 'token' => $token, 'tier' => $tier, 'expires' => $expires * 1000]);

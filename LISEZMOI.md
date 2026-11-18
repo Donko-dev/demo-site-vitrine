@@ -1,64 +1,63 @@
-# Créateur de site vitrine — version monétisée (FedaPay)
+# Créateur de site professionnel — version 3
 
-Ce paquet contient :
-- `index.html` : le configurateur (formulaire en 4 étapes, aperçu en direct, 3 modèles, téléchargement ZIP).
-- `verifier.php` : vérifie chaque paiement FedaPay côté serveur. **Doit être hébergé sur Hostinger** (PHP). GitHub Pages ne peut pas l'exécuter.
-- `config.example.php` : modèle de configuration (clés et prix).
+## Contenu du paquet
+- `index.html` : le configurateur (6 étapes, aperçu en direct, prix affiché avant génération, paiement FedaPay).
+- `verifier.php` : confirme chaque paiement auprès de FedaPay avec la clé secrète. À héberger sur **Hostinger** (PHP 8.1+ avec cURL). GitHub Pages ne peut pas l'exécuter.
+- `config.example.php` : modèle de configuration (clé secrète, mode sandbox ou live, prix par niveau, adresse du site).
 
-## Modèle économique
-- **Gratuit** : modèle Minimal, avec la mention « Site créé avec EMPIRE CODE HUB ».
-- **Premium** (5 000 FCFA par défaut, une fois par site) : 3 modèles, sans mention, plan du site et robots.txt.
+## Ce que fait le client
+1. Choisit un type de site (14 types, du site statique au gestionnaire de données).
+2. Renseigne son identité : nom, slogan, logo (300 Ko max), langue.
+3. Rédige son contenu : titre, accroche, éléments (jusqu'à 12), à propos.
+4. Choisit le design : 6 modèles, 8 palettes ou couleurs personnalisées, 5 polices, taille et graisse des titres, arrondis, ombres.
+5. Règle la mise en page : en-tête (fixe, classique, centré), titre d'accueil, pied de page, largeur, sections affichées.
+6. Renseigne son contact, voit le **prix immédiatement**, clique sur « Générer mon site », puis paie par FedaPay.
 
-Le prix et les textes se modifient dans le bloc `CONFIG` de `index.html` et dans `config.php`.
+## Tarifs par type de site
+| Niveau | Prix | Types de site |
+|---|---|---|
+| Débutant | 7 000 FCFA | Site statique, site vitrine, blog, portfolio, page de vente |
+| Intermédiaire | 12 000 FCFA | Site moderne animé, catalogue produits, restaurant / menu, documentation, événement |
+| Pro | 15 000 FCFA | Marketplace, réseau social, gestionnaire de données, application SaaS (maquettes d'interface) |
 
-## 1. Créer votre compte FedaPay
-1. Inscrivez-vous sur FedaPay et ouvrez d'abord le **mode sandbox** (test).
-2. Dans le tableau de bord, récupérez :
-   - la **clé publique** (commence par `pk_`) : elle va dans `index.html` ;
-   - la **clé secrète** (commence par `sk_`) : elle va **uniquement** dans `config.php`. Ne la mettez jamais dans `index.html`.
-3. **Autorisez votre domaine** pour Checkout.js (section « Domain Authorization » de la documentation FedaPay). Sans cela, le paiement ne s'ouvre pas sur votre site.
+Les tarifs se modifient à deux endroits, qui doivent rester identiques :
+- `PRICES` dans `index.html` ;
+- `prices` dans `config.php`.
 
-## 2. Configurer les fichiers
-Dans `index.html`, bloc `CONFIG` :
-```js
-FEDAPAY_PUBLIC_KEY: 'pk_sandbox_VOTRE_CLE_PUBLIQUE',
-FEDAPAY_ENV: 'sandbox',
-PRICE_XOF: 5000,
-VERIFY_URL: 'verifier.php',
-```
+## Mise en place
+### 1. FedaPay
+1. Créez votre compte FedaPay et travaillez d'abord en **sandbox**.
+2. Récupérez la clé **publique** (`pk_…`) pour `index.html`, et la clé **secrète** (`sk_…`) pour `config.php` uniquement.
+3. **Autorisez votre domaine** pour Checkout.js dans FedaPay. Sans cela, la fenêtre de paiement ne s'ouvre pas.
+
+### 2. Configuration
+Dans `index.html`, bloc `CONFIG` : renseignez `FEDAPAY_PUBLIC_KEY`.
 Copiez `config.example.php` en `config.php` et renseignez :
-- `fedapay_secret_key` : votre clé secrète ;
-- `fedapay_env` : `sandbox` pour tester, `live` pour encaisser ;
-- `price_xof` : le même prix que dans `index.html` ;
-- `allowed_origin` : l'adresse exacte de votre site, avec https ;
-- `token_secret` : une chaîne longue et aléatoire (générez-la avec `openssl rand -hex 32`).
+- `fedapay_secret_key`, `fedapay_env` (`sandbox` puis `live`) ;
+- `prices` (identiques à `PRICES`) ;
+- `allowed_origin` : l'adresse exacte de votre site, en https ;
+- `token_secret` : générez-la avec `openssl rand -hex 32`.
 
-## 3. Mettre en ligne sur Hostinger
-1. hPanel → Gestionnaire de fichiers → `public_html`.
-2. Téléversez `index.html`, `verifier.php` et `config.php` (pas `config.example.php`).
-3. Votre configurateur est à `https://votre-domaine.com/` ; la vérification à `https://votre-domaine.com/verifier.php`.
-4. Pour plus de sécurité, déplacez `config.php` au-dessus de `public_html` et adaptez la ligne `require` de `verifier.php`.
+### 3. Hostinger
+Dans hPanel → Gestionnaire de fichiers → `public_html`, téléversez `index.html`, `verifier.php` et `config.php`. Pour plus de sécurité, placez `config.php` au-dessus de `public_html` et adaptez la ligne `require` de `verifier.php`.
 
-## 4. Tester avant d'encaisser
-1. Gardez `FEDAPAY_ENV: 'sandbox'` et la clé `pk_sandbox_` / `sk_sandbox_`.
-2. Ouvrez le configurateur, créez un site, cliquez sur « Débloquer ».
-3. Effectuez le paiement de test indiqué par FedaPay.
-4. Vérifiez que le Premium s'active et que le ZIP ne contient plus la mention.
-5. Une même transaction ne peut débloquer le Premium qu'une seule fois (le serveur la refuse la seconde fois).
+### 4. Tests avant de passer en live
+- Un paiement de test doit débloquer le téléchargement.
+- Le même paiement, validé une seconde fois, doit être refusé.
+- Un montant inférieur au prix du niveau doit être refusé.
 
-## 5. Passer en réel
-- Remplacez les clés sandbox par les clés **live**, `fedapay_env` par `live`.
-- Vérifiez le domaine autorisé et le montant.
+## Points à confirmer avant de vendre
+- **Mobile Money uniquement** : le widget FedaPay affiche les moyens de paiement activés sur votre compte. Pour n'afficher que le Mobile Money, désactivez les cartes dans votre tableau de bord FedaPay, ou demandez-le au support FedaPay. Le code ne force pas ce réglage.
+- **Codes pays** (`bj`, `bf`, `ci`, `gn`, `ml`, `ne`, `sn`, `tg`) : vérifiez leur format exact dans la documentation FedaPay avant la mise en production.
+- **Liste des pays** : huit pays sont proposés. Vérifiez que la liste correspond à celle de FedaPay sur votre compte.
+- **Déblocage du téléchargement** : il est vérifié par le serveur, puis mémorisé dans le navigateur (30 jours). Le ZIP est généré dans le navigateur. Un utilisateur averti peut contourner cette étape. Pour une protection complète, la génération doit passer par le serveur.
+- **Marketplace, réseau social, gestionnaire de données, SaaS** : le configurateur produit des maquettes d'interface, sans backend, sans base de données et sans comptes utilisateurs. Un vrai marché ou réseau social demande une architecture serveur. Présentez ces types comme des maquettes, ou réévaluez leur prix.
 
 ## Dépannage
 | Message | Cause probable |
 |---|---|
 | « Le module de paiement ne se charge pas » | Pas de connexion, ou domaine non autorisé chez FedaPay |
-| « FedaPay ne répond pas (code 401) » | Mauvaise clé secrète, ou clé sandbox utilisée en mode live |
+| « FedaPay ne répond pas (code 401) » | Clé secrète erronée, ou clé sandbox utilisée en mode live |
+| « niveau de site inconnu » | `prices` de `config.php` incomplet |
+| « montant insuffisant » | Le prix de `config.php` est plus élevé que celui payé |
 | « transaction déjà utilisée » | Le même paiement a déjà été validé |
-| « Paiement reçu mais non confirmé » | Vérifiez `allowed_origin`, l'adresse de `verifier.php` et le journal d'erreurs Hostinger |
-
-## Limites à connaître
-- Le déblocage Premium est enregistré dans le navigateur de l'acheteur (30 jours). Un utilisateur averti peut le contourner. Pour une protection forte, le ZIP Premium doit être généré par le serveur : c'est une évolution possible.
-- Le paiement suit les règles et les frais de FedaPay.
-- Vérifiez les conditions de vente et la politique de remboursement avant d'ouvrir les paiements au public.
